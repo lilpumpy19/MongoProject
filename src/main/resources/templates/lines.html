@@ -22,19 +22,20 @@
   </tr>
   </thead>
   <tbody>
-  <tr th:each="line : ${lines}">
+  <tr th:each="line : ${lines}" th:data-id="${line.id}">
     <td th:text="${line.id}"></td>
-    <td th:text="${line.name}"></td>
-    <td th:text="${line.date}"></td>
-    <td th:text="${line.salary}"></td>
+    <td class="name" th:text="${line.name}"></td>
+    <td class="date" th:text="${line.date}"></td>
+    <td class="salary" th:text="${line.salary}"></td>
     <td>
-      <button th:data-id="${line.id}" onclick="editLine(this)" id = "change">Изменить</button>
-      <form th:action="@{/lines/delete}" method="post" style="display: inline;">
+      <form th:action="@{/lines/delete}" method="post">
         <input type="hidden" name="id" th:value="${line.id}" />
         <button type="submit">Удалить</button>
       </form>
+      <button type="button" onclick="editLine(this)">Изменить</button>
     </td>
   </tr>
+
   </tbody>
 </table>
 
@@ -50,39 +51,46 @@
 </form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   function editLine(button) {
-    var lineId = $(button).attr('th:data-id');  // Получить ID линии
     var lineRow = $(button).closest('tr');
+    var nameInput = lineRow.find('.name-input');
+    var salaryInput = lineRow.find('.salary-input');
 
-    lineRow.find('td:not(:last-child)').each(function() {
-      var value = $(this).text();
-      var input = $('<input type="text" class="line-input" value="' + value + '">');
-      $(this).html(input);
-    });
+    if (nameInput.length === 0 || salaryInput.length === 0) {
+      // Кнопка "Изменить" была нажата, преобразуем элементы в поля для ввода
+      var name = lineRow.find('.name').text();
+      var salary = lineRow.find('.salary').text();
 
-    var editButton = lineRow.find('button');
-    editButton.text('OK');
-    editButton.attr('onclick', 'saveLineChanges(this, ' + lineId + ')');
+      nameInput = $('<input type="text" class="line-input name-input" value="' + name + '">');
+      salaryInput = $('<input type="text" class="line-input salary-input" value="' + salary + '">');
+
+      lineRow.find('.name').html(nameInput);
+      lineRow.find('.salary').html(salaryInput);
+
+      $(button).text('ОК');
+    } else {
+      // Кнопка "ОК" была нажата, сохраняем изменения
+      var newName = nameInput.val();
+      var newSalary = salaryInput.val();
+
+      lineRow.find('.name').text(newName);
+      lineRow.find('.salary').text(newSalary);
+
+      $(button).text('Изменить');
+      sendLineChanges(lineRow.attr('data-id'), newName, newSalary);
+    }
   }
 
-  function saveLineChanges(button, lineId) {
-    var lineRow = $(button).closest('tr');
-
-    lineRow.find('td:not(:last-child)').each(function() {
-      var value = $(this).find('input').val();
-      $(this).html(value);
-    });
-
-    var editButton = lineRow.find('button');
-    editButton.text('Изменить');
-    editButton.attr('onclick', 'editLine(this)');
-
+  function sendLineChanges(lineId, newName, newSalary) {
     // Отправить AJAX-запрос на сервер для сохранения изменений
-    var url = '/lines/update?id=' + lineId;
-    var data = lineRow.find('td:not(:last-child)').serialize();
+    var url = '/lines/update';
+    var data = { id: lineId, name: newName, salary: newSalary };
+
     $.post(url, data);
   }
 </script>
+
 </body>
 </html>

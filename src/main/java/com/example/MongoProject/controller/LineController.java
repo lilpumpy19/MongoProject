@@ -41,24 +41,15 @@ public class LineController {
     }
 
     @PostMapping("/update")
-    public String updateLine(@RequestParam("id") String id,
-                             @RequestParam("name") String name,
-                             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
-                             @RequestParam("salary") int salary) {
-        // Поиск линии по идентификатору
+    public String updateLine(@RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("salary") int salary) {
         Line line = lineService.findById(id);
 
         if (line != null) {
-            // Обновление значений линии
             line.setName(name);
-            line.setDate(date);
             line.setSalary(salary);
-
-            // Сохранение изменений
             lineService.save(line);
         }
 
-        // Перенаправление на страницу со списком линий
         return "redirect:/lines";
     }
 
