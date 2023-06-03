@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>All Lines</title>
+  <style>
+    .line-input {
+      width: 100px;
+    }
+  </style>
 </head>
 <body>
 <h1>All Lines</h1>
@@ -13,6 +18,7 @@
     <th>Name</th>
     <th>Date</th>
     <th>Salary</th>
+    <th>Actions</th>
   </tr>
   </thead>
   <tbody>
@@ -22,17 +28,16 @@
     <td th:text="${line.date}"></td>
     <td th:text="${line.salary}"></td>
     <td>
-      <form th:action="@{/lines/delete}" method="post">
+      <button th:data-id="${line.id}" onclick="editLine(this)" id = "change">Изменить</button>
+      <form th:action="@{/lines/delete}" method="post" style="display: inline;">
         <input type="hidden" name="id" th:value="${line.id}" />
         <button type="submit">Удалить</button>
       </form>
-
-
-
     </td>
   </tr>
   </tbody>
 </table>
+
 <h1>Add line</h1>
 <form action="/lines/add" method="post">
   <label>Имя:</label>
@@ -43,5 +48,41 @@
 
   <button type="submit">Добавить строку</button>
 </form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  function editLine(button) {
+    var lineId = $(button).attr('th:data-id');  // Получить ID линии
+    var lineRow = $(button).closest('tr');
+
+    lineRow.find('td:not(:last-child)').each(function() {
+      var value = $(this).text();
+      var input = $('<input type="text" class="line-input" value="' + value + '">');
+      $(this).html(input);
+    });
+
+    var editButton = lineRow.find('button');
+    editButton.text('OK');
+    editButton.attr('onclick', 'saveLineChanges(this, ' + lineId + ')');
+  }
+
+  function saveLineChanges(button, lineId) {
+    var lineRow = $(button).closest('tr');
+
+    lineRow.find('td:not(:last-child)').each(function() {
+      var value = $(this).find('input').val();
+      $(this).html(value);
+    });
+
+    var editButton = lineRow.find('button');
+    editButton.text('Изменить');
+    editButton.attr('onclick', 'editLine(this)');
+
+    // Отправить AJAX-запрос на сервер для сохранения изменений
+    var url = '/lines/update?id=' + lineId;
+    var data = lineRow.find('td:not(:last-child)').serialize();
+    $.post(url, data);
+  }
+</script>
 </body>
 </html>

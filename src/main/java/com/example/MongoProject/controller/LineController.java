@@ -4,6 +4,7 @@ import com.example.MongoProject.models.Line;
 import com.example.MongoProject.service.LineService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,28 @@ public class LineController {
                           @RequestParam("salary") int salary) {
         Line line = new Line(name, salary);
         lineService.addLine(line);
+        return "redirect:/lines";
+    }
+
+    @PostMapping("/update")
+    public String updateLine(@RequestParam("id") String id,
+                             @RequestParam("name") String name,
+                             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+                             @RequestParam("salary") int salary) {
+        // Поиск линии по идентификатору
+        Line line = lineService.findById(id);
+
+        if (line != null) {
+            // Обновление значений линии
+            line.setName(name);
+            line.setDate(date);
+            line.setSalary(salary);
+
+            // Сохранение изменений
+            lineService.save(line);
+        }
+
+        // Перенаправление на страницу со списком линий
         return "redirect:/lines";
     }
 

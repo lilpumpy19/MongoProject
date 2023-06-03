@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +22,15 @@ public class LineService {
     }
 
     public void addLine(Line line){
+        repository.save(line);
+    }
+
+    public Line findById(String id) {
+        Optional<Line> lineOptional = repository.findById(id);
+        return lineOptional.orElse(null);
+    }
+
+    public void save(Line line) {
         repository.save(line);
     }
 }
