@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>All Lines</title>
-  <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
 <h1>All Lines</h1>
@@ -27,9 +26,22 @@
         <input type="hidden" name="id" th:value="${line.id}" />
         <button type="submit">Удалить</button>
       </form>
+
+
+
     </td>
   </tr>
   </tbody>
 </table>
+<h1>Add line</h1>
+<form action="/lines/add" method="post">
+  <label>Имя:</label>
+  <input type="text" name="name" /><br/>
+
+  <label>Зарплата:</label>
+  <input type="text" name="salary" /><br/>
+
+  <button type="submit">Добавить строку</button>
+</form>
 </body>
 </html>

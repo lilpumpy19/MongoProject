@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -30,6 +31,12 @@ public class LineController {
         lineService.deleteLineById(id);
         return "redirect:/lines";
     }
-
+    @PostMapping("/add")
+    public String addLine(@RequestParam("name") String name,
+                          @RequestParam("salary") int salary) {
+        Line line = new Line(name, salary);
+        lineService.addLine(line);
+        return "redirect:/lines";
+    }
 
 }

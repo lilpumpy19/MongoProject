@@ -27,10 +27,10 @@ public class Line {
 
     }
 
-    public Line(String name,Date date,int salary) {
+    public Line(String name,int salary) {
         this.id= UUID.randomUUID().toString();
         this.name = name;
-        this.date=date;
+        this.date=new Date();
         this.salary=salary;
     }
 

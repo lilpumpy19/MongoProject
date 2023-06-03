@@ -19,4 +19,8 @@ public class LineService {
     public void deleteLineById(String id){
         repository.deleteById(id);
     }
+
+    public void addLine(Line line){
+        repository.save(line);
+    }
 }
