@@ -16,4 +16,7 @@ public class LineService {
     public List<Line> getLines(){
         return repository.findAll();
     }
+    public void deleteLineById(String id){
+        repository.deleteById(id);
+    }
 }

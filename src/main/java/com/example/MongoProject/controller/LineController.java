@@ -5,13 +5,12 @@ import com.example.MongoProject.service.LineService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/lines")
 @AllArgsConstructor
 public class LineController {
@@ -20,8 +19,17 @@ public class LineController {
 
 
     @GetMapping()
-    public List<Line> getLines(){
-       return lineService.getLines();
+    public String getLines(Model model) {
+        List<Line> lines = lineService.getLines();
+        model.addAttribute("lines", lines);
+        return "lines";
     }
+
+    @PostMapping("/delete")
+    public String deleteLine(@RequestParam("id") String id) {
+        lineService.deleteLineById(id);
+        return "redirect:/lines";
+    }
+
 
 }
