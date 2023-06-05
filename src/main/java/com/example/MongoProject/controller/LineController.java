@@ -24,6 +24,14 @@ public class LineController {
     public String getLines(Model model) {
         List<Line> lines = lineService.getLines();
         model.addAttribute("lines", lines);
+        double averageSalary = lineService.getAverageSalary();
+        double totalSalary = lineService.getSumSalaryReport();
+        double maxSalary = lineService.getMaxSalaryReport();
+
+        model.addAttribute("lines", lines);
+        model.addAttribute("averageSalary", averageSalary);
+        model.addAttribute("totalSalary", totalSalary);
+        model.addAttribute("maxSalary", maxSalary);
         return "lines";
     }
 

@@ -33,4 +33,16 @@ public class LineService {
     public void save(Line line) {
         repository.save(line);
     }
+
+    public double getAverageSalary() {
+        return repository.getAverageSalary();
+    }
+
+    public double getSumSalaryReport() {
+        return repository.getSumSalaryReport();
+    }
+
+    public double getMaxSalaryReport() {
+        return repository.getMaxSalaryReport();
+    }
 }
