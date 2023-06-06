@@ -5,6 +5,7 @@ import com.example.MongoProject.service.LineService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class LineController {
 
 
     @GetMapping()
+    @PreAuthorize("hasRole('GET_LINES')")
     public String getLines(Model model) {
         List<Line> lines = lineService.getLines();
         model.addAttribute("lines", lines);
@@ -36,11 +38,13 @@ public class LineController {
     }
 
     @PostMapping("/delete")
+    @PreAuthorize("hasRole('DELETE_LINE')")
     public String deleteLine(@RequestParam("id") String id) {
         lineService.deleteLineById(id);
         return "redirect:/lines";
     }
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADD_LINE')")
     public String addLine(@RequestParam("name") String name,
                           @RequestParam("salary") int salary) {
         Line line = new Line(name, salary);
@@ -49,6 +53,7 @@ public class LineController {
     }
 
     @PostMapping("/update")
+    @PreAuthorize("hasRole('UPDATE_LINE')")
     public String updateLine(@RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("salary") int salary) {
         Line line = lineService.findById(id);
 
