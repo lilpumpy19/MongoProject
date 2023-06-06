@@ -14,7 +14,7 @@
 <table>
   <thead>
   <tr>
-    <th>ID</th>
+    <th style="display: none;">ID</th>
     <th>Name</th>
     <th>Date</th>
     <th>Salary</th>
@@ -23,7 +23,7 @@
   </thead>
   <tbody>
   <tr th:each="line : ${lines}" th:data-id="${line.id}">
-    <td th:text="${line.id}"></td>
+    <td style="display: none;" th:text="${line.id}"></td>
     <td class="name" th:text="${line.name}"></td>
     <td class="date" th:text="${line.date}"></td>
     <td class="salary" th:text="${line.salary}"></td>
