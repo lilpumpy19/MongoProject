@@ -38,6 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .withUser("admin")
                 .password("{noop}password")
-                .roles("GET_LINES", "ADD_LINE", "DELETE_LINE", "UPDATE_LINE");
+                .roles("GET_LINES", "ADD_LINE", "DELETE_LINE", "UPDATE_LINE")
+                .and()
+                .withUser("kent")
+                .password("{noop}password")
+                .roles("GET_LINES", "ADD_LINE");
     }
 }
