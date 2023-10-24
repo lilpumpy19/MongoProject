@@ -2,10 +2,10 @@ package com.example.MongoProject.controller;
 
 import com.example.MongoProject.models.Line;
 import com.example.MongoProject.service.LineService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +16,14 @@ import java.util.List;
 @Controller
 @RequestMapping("/lines")
 @AllArgsConstructor
+@Api(description = "Line Controller")
 public class LineController {
 
     private final LineService lineService;
 
 
     @GetMapping()
-    @PreAuthorize("hasRole('GET_LINES')")
+    @ApiOperation(value = "Get all lines")
     public String getLines(Model model) {
         List<Line> lines = lineService.getLines();
         model.addAttribute("lines", lines);
@@ -38,13 +39,13 @@ public class LineController {
     }
 
     @PostMapping("/delete")
-    @PreAuthorize("hasRole('DELETE_LINE')")
+    @ApiOperation(value = "Delete line")
     public String deleteLine(@RequestParam("id") String id) {
         lineService.deleteLineById(id);
         return "redirect:/lines";
     }
     @PostMapping("/add")
-    @PreAuthorize("hasRole('ADD_LINE')")
+    @ApiOperation(value = "Add line")
     public String addLine(@RequestParam("name") String name,
                           @RequestParam("salary") int salary) {
         Line line = new Line(name, salary);
@@ -53,7 +54,7 @@ public class LineController {
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasRole('UPDATE_LINE')")
+    @ApiOperation(value = "Update line")
     public String updateLine(@RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("salary") int salary) {
         Line line = lineService.findById(id);
 
