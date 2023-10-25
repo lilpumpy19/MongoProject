@@ -2,8 +2,7 @@ package com.example.MongoProject.controller;
 
 import com.example.MongoProject.models.Line;
 import com.example.MongoProject.service.LineService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -18,14 +17,15 @@ import java.util.List;
 @Controller
 @RequestMapping("/lines")
 @AllArgsConstructor
-@Api(tags = "Lines", description = "Operations about lines")
+//@Api(tags = "Lines", description = "Operations about lines")
+@Tag(name = "Line")
 public class LineController {
 
     private final LineService lineService;
 
 
-    @GetMapping()
-    @ApiOperation(value = "Get all lines")
+    @GetMapping("/")
+    @Operation(description = "Get all lines")
     public String getLines(Model model) {
         List<Line> lines = lineService.getLines();
         model.addAttribute("lines", lines);
@@ -41,18 +41,14 @@ public class LineController {
     }
 
     @PostMapping("/delete")
-    @ApiOperation(
-            value = "Delete line",
-            notes = "Delete line by id"
-    )
+    @Operation(description = "Delete line")
     public String deleteLine(@RequestParam("id") @Parameter(description = "Person id") String id) {
         lineService.deleteLineById(id);
         return "redirect:/lines";
     }
     @PostMapping("/add")
-    @ApiOperation(
-            value = "Add line",
-            notes = "Add line with name and salary"
+    @Operation(
+            description = "Add line with name and salary"
     )
     public String addLine(@RequestParam("name") @Parameter(description = "Person name") String name,
                           @RequestParam("salary") @Parameter(description = "Person salary") int salary) {
@@ -62,9 +58,8 @@ public class LineController {
     }
 
     @PostMapping("/update")
-    @ApiOperation(
-            value = "Update line",
-            notes = "Update line with id and name and salary"
+    @Operation(
+            description = "Update line with id and name and salary"
     )
     public String updateLine(
             @RequestParam("id") @Parameter(description = "Person id") String id,
